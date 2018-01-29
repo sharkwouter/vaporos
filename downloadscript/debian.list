@@ -1,0 +1,7 @@
+#Debian repository
+deb http://deb.debian.org/debian/ jessie main contrib non-free
+deb-src http://deb.debian.org/debian/ jessie main contrib non-free
+
+#Debian backports
+deb http://deb.debian.org/debian/ jessie-backports main contrib non-free
+deb-src http://deb.debian.org/debian/ jessie-backports main contrib non-free
