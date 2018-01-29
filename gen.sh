@@ -86,6 +86,11 @@ getchecksum ( ) {
     
     #Get the checksum of our version
     echo "local checksum:"
+    if [ ! -f ${ISOPATH}/${STEAMINSTALLFILE} ]; then
+        echo "No file found"
+        return
+    fi
+    
     localinstallermd5sum=$(md5sum ${ISOPATH}/${STEAMINSTALLFILE} | cut -f1 -d' ')
     echo ${localinstallermd5sum}
     
@@ -101,8 +106,10 @@ download ( ) {
     if getchecksum; then
         echo "Using existing ${STEAMINSTALLFILE}"
     else
-        echo "The downloaded version doesn't match the upstream version, deleting..."
-        rm ${ISOPATH}/${STEAMINSTALLFILE}
+        if [ ! -f ${ISOPATH}/${STEAMINSTALLFILE} ]; then
+            echo "The downloaded version doesn't match the upstream version, deleting..."
+            rm ${ISOPATH}/${STEAMINSTALLFILE}
+        fi
     fi
     
     #Download if the iso doesn't exist or the -d flag was passed
@@ -141,7 +148,7 @@ extract ( ) {
 #Make changes to ${BUILD}
 createbuildroot ( ) {
     #Generate our new repos
-	echo "Generating Packages.."
+	echo "Generating pool.."
 	mv ${BUILD}/pool ${BUILD}/poolbase
 	rm -rf ${BUILD}/dists
 	mkdir ${BUILD}/conf
@@ -162,11 +169,11 @@ createbuildroot ( ) {
 	
 	#Execute on the config
 	#Everything under install will be added to the default.preseed for installation
-	install=$(grep '^install' ${WORKDIR}/${CONFIG}|cut -d"=" -f2)
+	install=$(grep '^install' ${CONFIG}|cut -d"=" -f2)
 	sed -i "/steamos\-autoupdate/ s/$/ ${install}/" ${BUILD}/default.preseed
 	
 	#Make symlinks based on the firmwares mentioned in the config
-	firmware=$(grep '^firmware' ${WORKDIR}/${CONFIG}|cut -d"=" -f2)
+	firmware=$(grep '^firmware' ${CONFIG}|cut -d"=" -f2)
 	echo "Creating firmware symlinks..."
 	for f in ${firmware}; do
 	    ln -s $(find buildroot/pool/ -name ${f}_*_*.deb|head -1) ${BUILD}/firmware
