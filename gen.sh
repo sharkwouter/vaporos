@@ -161,7 +161,6 @@ createbuildroot ( ) {
 	fi
 	
 	#Execute on the config
-	
 	#Everything under install will be added to the default.preseed for installation
 	install=$(grep '^install' ${WORKDIR}/${CONFIG}|cut -d"=" -f2)
 	sed -i "/steamos\-autoupdate/ s/$/ ${install}/" ${BUILD}/default.preseed
@@ -172,6 +171,11 @@ createbuildroot ( ) {
 	for f in ${firmware}; do
 	    ln -s $(find buildroot/pool/ -name ${f}_*_*.deb|head -1) ${BUILD}/firmware
 	done
+	
+	#Generate new md5sum.txt for the iso
+	cd ${BUILD}
+	find . -type f -print0 | xargs -0 md5sum > md5sum.txt
+	cd -
 }
 
 #Generate the ISO from ${BUILD}
