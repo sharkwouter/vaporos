@@ -33,7 +33,7 @@ ISONAME="vaporos-latest.iso"
 ISOVNAME="VaporOS"
 
 # Other info:
-DEPS="docker xorriso lftp 7z rsync reprepro wget"
+DEPS="xorriso lftp 7z rsync reprepro wget"
 
 #############
 # Functions #
