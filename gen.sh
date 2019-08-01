@@ -158,6 +158,15 @@ createbuildroot ( ) {
 	reprepro -Vb ${BUILD} includedeb ${DISTNAME} ${PACKAGES}/*.deb > /dev/null #This adds packages from the pool directory
 	rm -rf ${BUILD}/poolbase ${BUILD}/db ${BUILD}/conf
 	
+	#Find isohdpfx.bin, used for booting?
+	if [ -f "isohdpfx.bin" ]; then
+		SYSLINUX="isohdpfx.bin"
+	fi
+	if [ -z $SYSLINUX ]; then
+		echo "Error: isohdpfx.bin not found! Try putting it in ${pwd}."
+		exit 1	
+	fi
+	
 	#Execute on the config
 	#Everything under install will be added to the default.preseed for installation
 	install=$(grep '^install' ${CONFIG}|cut -d"=" -f2)
