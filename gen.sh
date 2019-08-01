@@ -158,15 +158,6 @@ createbuildroot ( ) {
 	reprepro -Vb ${BUILD} includedeb ${DISTNAME} ${PACKAGES}/*.deb > /dev/null #This adds packages from the pool directory
 	rm -rf ${BUILD}/poolbase ${BUILD}/db ${BUILD}/conf
 	
-	#Find isohdpfx.bin, used for booting?
-	if [ -f "isohdpfx.bin" ]; then
-		SYSLINUX="isohdpfx.bin"
-	fi
-	if [ -z $SYSLINUX ]; then
-		echo "Error: isohdpfx.bin not found! Try putting it in ${pwd}."
-		exit 1	
-	fi
-	
 	#Execute on the config
 	#Everything under install will be added to the default.preseed for installation
 	install=$(grep '^install' ${CONFIG}|cut -d"=" -f2)
@@ -176,7 +167,13 @@ createbuildroot ( ) {
 	firmware=$(grep '^firmware' ${CONFIG}|cut -d"=" -f2)
 	echo "Creating firmware symlinks..."
 	for f in ${firmware}; do
-	    ln -s $(find buildroot/pool/ -name ${f}_*_*.deb|head -1) ${BUILD}/firmware
+		package="$(find buildroot/pool/ -name ${f}_*_*.deb|head -1)"
+		if [ "${package}" ];then
+			ln -s $(find ${BUILD}/pool/ -name ${f}_*_*.deb|head -1) ${BUILD}/firmware
+		else
+			echo "Error: Couln't find ${f} firmware package"
+			exit 1
+		fi
 	done
 	
 	#Generate new md5sum.txt for the iso
