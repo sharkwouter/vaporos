@@ -16,14 +16,15 @@ cd "$(dirname "$0")"
 # Basic variables #
 ###################
 # Directories:
-BUILD="${PWD}/buildroot"
 WORKDIR="${PWD}"
-CONFIG="${PWD}/config"
-PACKAGES="${PWD}/packages"
+BUILD="${WORKDIR}/buildroot"
+FIRMWAREFILE="${WORKDIR}/firmware.txt"
+PACKAGES="${WORKDIR}/packages"
+ADDITIONSPATH="${WORKDIR}/additions"
 ISOPATH=${WORKDIR}
 
 # Base ISO:
-UPSTREAMURL="http://repo.steampowered.com"
+UPSTREAMURL="http://repo.steampowered.com/download/"
 STEAMINSTALLFILE="SteamOSDVD.iso"
 MD5SUMFILE="MD5SUMS"
 
@@ -31,6 +32,7 @@ MD5SUMFILE="MD5SUMS"
 DISTNAME="brewmaster"
 ISONAME="vaporos-latest.iso"
 ISOVNAME="VaporOS"
+ISODESCRIPTION="VaporOS Brewmaster is SteamOS with extras"
 
 # Other info:
 DEPS="xorriso lftp 7z rsync reprepro wget"
@@ -43,9 +45,10 @@ usage ( )
 {
 	cat <<EOF
 	$0 [OPTION]
-	-h        Print this message
-	-d		  Re-Download ${STEAMINSTALLFILE}
-	-n		  Set the name for the iso
+	-h		  Print this message
+	-d		  Only download the base ISO
+	-f		  Return filename of base ISO
+	-n		  Set the name for the ISO
 EOF
 }
 
@@ -64,6 +67,16 @@ deps ( ) {
 		echo "Volume ID is more than 32 characters: ${ISOVNAME}"
 		exit 1
 	fi
+
+	#Make sure isohdpfx.bin exists
+	if [ -f "isohdpfx.bin" ]; then
+		SYSLINUX="isohdpfx.bin"
+	elif [ -f "/usr/lib/ISOLINUX/isohdpfx.bin" ]; then
+		SYSLINUX="/usr/lib/ISOLINUX/isohdpfx.bin"
+	else
+		echo "Error: isohdpfx.bin not found! Try putting it in ${WORKDIR}."
+		exit 1
+	fi
 }
 
 #Remove the ${BUILD} directory to start from scratch
@@ -72,48 +85,48 @@ scratch ( ) {
 		echo "Building ${BUILD} from scratch"
 		rm -fr "${BUILD}"
 	fi
-	
+
 	#Create new directory
 	mkdir -p ${BUILD}
 }
 
 #Get the checksum of the current ISO
 getchecksum ( ) {
-    #Get the checksum of the upstream version
-    echo "Upstream checksum:"
-    upstreaminstallermd5sum=$(wget --quiet -O- ${UPSTREAMURL}/download/brewmaster/${MD5SUMFILE} | grep ${STEAMINSTALLFILE}$ | cut -f1 -d' ')
-    echo ${upstreaminstallermd5sum}
-    
-    #Get the checksum of our version
-    echo "local checksum:"
-    if [ ! -f ${ISOPATH}/${STEAMINSTALLFILE} ]; then
-        echo "No file found"
-        return
-    fi
-    
-    localinstallermd5sum=$(md5sum ${ISOPATH}/${STEAMINSTALLFILE} | cut -f1 -d' ')
-    echo ${localinstallermd5sum}
-    
-    #Return if they are the same
-    [ "${upstreaminstallermd5sum}" = "${localinstallermd5sum}" ]
+	#Get the checksum of the upstream version
+	echo "Upstream checksum:"
+	upstreaminstallermd5sum=$(wget --quiet -O- ${UPSTREAMURL}/${MD5SUMFILE} | grep ${STEAMINSTALLFILE}$ | cut -f1 -d' ')
+	echo ${upstreaminstallermd5sum}
+
+	#Get the checksum of our version
+	echo "local checksum:"
+	if [ ! -f ${ISOPATH}/${STEAMINSTALLFILE} ]; then
+		echo "No file found"
+		return
+	fi
+
+	localinstallermd5sum=$(md5sum ${ISOPATH}/${STEAMINSTALLFILE} | cut -f1 -d' ')
+	echo ${localinstallermd5sum}
+
+	#Return if they are the same
+	[ "${upstreaminstallermd5sum}" = "${localinstallermd5sum}" ]
 }
 
 #Download the iso, if needed
 download ( ) {
-    steaminstallerurl="${UPSTREAMURL}/download/brewmaster/${STEAMINSTALLFILE}"
-    
-    #Make we have the latest version
-    if getchecksum; then
-        echo "Using existing ${STEAMINSTALLFILE}"
-    else
-        if [ ! -f ${ISOPATH}/${STEAMINSTALLFILE} ]; then
-            echo "The downloaded version doesn't match the upstream version, deleting..."
-            rm ${ISOPATH}/${STEAMINSTALLFILE}
-        fi
-    fi
-    
-    #Download if the iso doesn't exist or the -d flag was passed
-    if [ ! -f ${STEAMINSTALLFILE} ] || [ -n "${redownload}" ]; then
+	steaminstallerurl="${UPSTREAMURL}/${STEAMINSTALLFILE}"
+
+	#Make we have the latest version
+	if getchecksum; then
+		echo "Using existing ${STEAMINSTALLFILE}"
+	else
+		if [ ! -f ${ISOPATH}/${STEAMINSTALLFILE} ]; then
+			echo "The downloaded version doesn't match the upstream version, deleting..."
+			rm ${ISOPATH}/${STEAMINSTALLFILE}
+		fi
+	fi
+
+	#Download if the iso doesn't exist or the -d flag was passed
+	if [ ! -f ${STEAMINSTALLFILE} ] || [ -n "${redownload}" ]; then
 		if [ -f ${STEAMINSTALLFILE} ];then
 			rm ${STEAMINSTALLFILE}
 		fi
@@ -135,7 +148,7 @@ download ( ) {
 
 #Extract the ISO into the ${BUILD} 
 extract ( ) {
-    #Extract SteamOSDVD.iso into BUILD
+	#Extract SteamOSDVD.iso into BUILD
 	if 7z x ${STEAMINSTALLFILE} -o${BUILD}; then
 		:
 	else
@@ -147,35 +160,24 @@ extract ( ) {
 
 #Make changes to ${BUILD}
 createbuildroot ( ) {
-    #Generate our new repos
+	#Generate our new repos
 	echo "Generating pool.."
 	mv ${BUILD}/pool ${BUILD}/poolbase
 	rm -rf ${BUILD}/dists
 	mkdir ${BUILD}/conf
-	/bin/echo -e "Origin: Valve Software LLC\nSuite: testing\nCodename: ${DISTNAME}\nComponents: main contrib non-free\nUDebComponents: main\nArchitectures: i386 amd64\nDescription: SteamOS distribution based on Debian 8.0 Jessie\nContents: udebs . .gz\nUDebIndices: Packages . .gz" > ${BUILD}/conf/distributions
+	/bin/echo -e "Origin: ${ISOVNAME}\nLabel:${ISOVNAME}\nSuite: stable\nCodename: ${DISTNAME}\nComponents: main contrib non-free\nUDebComponents: main\nArchitectures: i386 amd64\nDescription: ${ISODESCRIPTION}\nContents: udebs . .gz\nUDebIndices: Packages . .gz" > ${BUILD}/conf/distributions
 	reprepro -Vb ${BUILD} includedeb ${DISTNAME} ${BUILD}/poolbase/*/*/*/*.deb > /dev/null
 	reprepro -Vb ${BUILD} includeudeb ${DISTNAME} ${BUILD}/poolbase/*/*/*/*.udeb > /dev/null
 	reprepro -Vb ${BUILD} includedeb ${DISTNAME} ${PACKAGES}/*.deb > /dev/null #This adds packages from the pool directory
 	rm -rf ${BUILD}/poolbase ${BUILD}/db ${BUILD}/conf
-	
-	#Find isohdpfx.bin, used for booting?
-	if [ -f "isohdpfx.bin" ]; then
-		SYSLINUX="isohdpfx.bin"
-	fi
-	if [ -z $SYSLINUX ]; then
-		echo "Error: isohdpfx.bin not found! Try putting it in ${pwd}."
-		exit 1	
-	fi
-	
-	#Execute on the config
-	#Everything under install will be added to the default.preseed for installation
-	install=$(grep '^install' ${CONFIG}|cut -d"=" -f2)
-	sed -i "/steamos\-autoupdate/ s/$/ ${install}/" ${BUILD}/default.preseed
-	
+
+	#Copy additions directory
+	echo "Copying configuration files"
+	rsync -av ${ADDITIONSPATH}/ ${BUILD}/
+
 	#Make symlinks based on the firmwares mentioned in the config
-	firmware=$(grep '^firmware' ${CONFIG}|cut -d"=" -f2)
 	echo "Creating firmware symlinks..."
-	for f in ${firmware}; do
+	for f in `cat ${FIRMWAREFILE}`; do
 		package="$(find buildroot/pool/ -name ${f}_*_*.deb|head -1)"
 		if [ "${package}" ];then
 			ln -s $(find ${BUILD}/pool/ -name ${f}_*_*.deb|head -1) ${BUILD}/firmware
@@ -184,8 +186,9 @@ createbuildroot ( ) {
 			exit 1
 		fi
 	done
-	
+
 	#Generate new md5sum.txt for the iso
+	echo "Creating md5sum.txt file" 
 	cd ${BUILD}
 	find . -type f -print0 | xargs -0 md5sum > md5sum.txt
 	cd -
@@ -193,12 +196,12 @@ createbuildroot ( ) {
 
 #Generate the ISO from ${BUILD}
 createiso ( ) {
-    #Remove old ISO
+	#Remove old ISO
 	if [ -f ${ISOPATH}/${ISONAME} ]; then
 		echo "Removing old ISO ${ISOPATH}/${ISONAME}"
 		rm -f "${ISOPATH}/${ISONAME}"
 	fi
-	
+
 	#Build the ISO
 	echo "Building ${ISOPATH}/${ISONAME} ..."
 	xorriso -as mkisofs -r -checksum_algorithm_iso md5,sha1,sha256,sha512 \
@@ -225,25 +228,36 @@ createmd5sum ( ) {
 # Getopts #
 ###########
 #Setup command line arguments
-while getopts "hdn:" OPTION; do
-        case ${OPTION} in
-        h)
-                usage
-                exit 1
-        ;;
-        d)
-                redownload="1"
-        ;;
-        n)
-        	ISOVNAME="${OPTARG}"
-        	ISONAME=$(echo "${OPTARG}.iso"|tr '[:upper:]' '[:lower:]'|tr "\ " "-")
-        ;;
-        *)
-                echo "${OPTION} - Unrecongnized option"
-                usage
-                exit 1
-        ;;
-        esac
+while getopts "hdfn:" OPTION; do
+	case ${OPTION} in
+	h)
+		usage
+		exit 1
+	;;
+	d)
+		if which "lftp" >/dev/null 2>&1; then
+			:
+		else
+			echo "Missing dependency: lftp"
+			exit 1
+		fi
+		download
+		exit 0
+	;;
+	n)
+		ISOVNAME="${OPTARG}"
+		ISONAME=$(echo "${OPTARG}.iso"|tr '[:upper:]' '[:lower:]'|tr "\ " "-")
+	;;
+	f)
+		echo "${ISOPATH}/${STEAMINSTALLFILE}"
+		exit 0
+	;;
+	*)
+		echo "${OPTION} - Unrecongnized option"
+		usage
+		exit 1
+	;;
+	esac
 done
 
 #############
@@ -255,7 +269,7 @@ deps
 #Replace ${BUILD} with an empty directory
 scratch
 
-#Download the ISO from Valve's website
+#Download the base ISO
 download
 
 #Extract the ISO into ${BUILD}
