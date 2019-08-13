@@ -1,4 +1,5 @@
 actkbd
+bash-completion
 broadcom-sta-dkms
 curl
 dkms
@@ -31,3 +32,5 @@ sudo
 unattended-upgrades
 valve-archive-keyring
 valve-wallpapers
+vaporos-archive-keyring
+vaporos-brewmaster-repo
