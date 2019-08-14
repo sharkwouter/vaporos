@@ -115,7 +115,7 @@ d-i apt-setup/local0/source boolean true
 # d-i debian-installer/allow_unauthenticated boolean true
 
 # Individual additional packages to install
-d-i pkgsel/include string libc6:i386 libgl1-mesa-dri:i386 steamos-modeswitch-inhibitor:i386 steam:i386 nvidia-vdpau-driver:i386 libtxc-dxtn-s2tc0:i386 steamos-packages:i386 steamos-packages:amd64 libnvidia-encode1:amd64 steamos-modeswitch-inhibitor:amd64 steamos-autoupdate gedit file-roller vlc gnome-tweak-tool kodi libav-tools vaporos-binds-xbox360 vaporos-trim-support2 vaporos-ftpserver retroarch retroarch-joypad-autoconfig libretro-4do libretro-beetle-wswan libretro-desmume libretro-fceumm libretro-gambatte libretro-mupen64plus libretro-pcsx1 libretro-ppsspp libretro-snes9x-next libretro-stella libretro-vba-next
+d-i pkgsel/include string libc6:i386 libgl1-mesa-dri:i386 steamos-modeswitch-inhibitor:i386 steam:i386 nvidia-vdpau-driver:i386 libtxc-dxtn-s2tc0:i386 steamos-packages:i386 steamos-packages:amd64 libnvidia-encode1:amd64 steamos-modeswitch-inhibitor:amd64 steamos-autoupdate vaporos-packages
 
 # Whether to upgrade packages after debootstrap.
 # Allowed values: none, safe-upgrade, full-upgrade
