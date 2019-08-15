@@ -15,4 +15,4 @@ VaporOS contains a features found in SteamOS plus the following additions:
 
 ## Download
 
-[Download the latest Vaporos release](https://github.com/sharkwouter/vaporos/releases/download/2.195/vaporos-2.195.iso)
+Download the latest Vaporos release [here](https://github.com/sharkwouter/vaporos/releases).
