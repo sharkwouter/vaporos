@@ -1,10 +1,10 @@
 # VaporOS
 
-VaporOS is SteamOS with more features.
+SteamOS is an operating system which can turn a computer into a game console. VaporOS improves on this by not only focussing on games, but also offer multimedia and emulation support along with some other extras to make the system more enjoyable to use.
 
 ## Features
 
-VaporOS contains a features found in SteamOS plus the following additions:
+VaporOS contains all the features found in SteamOS plus the following additions:
 
 - **Retroarch**, an emulator  frontend with support for PSP, PS1, N64, SNES, NES, GBA and more
 - **Kodi**, an entertainment center which can play videos and music
