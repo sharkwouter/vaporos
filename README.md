@@ -11,7 +11,6 @@ VaporOS contains all the features found in SteamOS plus the following additions:
 - **VaporOS-FTPServer**, a file server which allows you to easily transfer files
 - **Improved desktop experience** with a text editor, archive manager, media player (**VLC**) and **Gnome Tweak Tool** added
 - **Bash completion** for command line users
-- Button combinations for **Xbox 360 controllers** for recording, taking snapshots and showing the framerate.
 - **TRIM support** for SSDs
 
 ## Download
@@ -54,15 +53,17 @@ After installation there are a couple of steps to take to allow the use of Vapor
 
 ### Adding the VaporOS Applications to Steam
 
-
+After logging in the Retroarch, Kodi and VaporOS-FTPServer have to be added to Steam before then can be used. To do this go to setting and under System pick "Add Library Shortcut". Pick the application you'd like to add. Repeat until all of them are in your Steam library.
 
 ### Transfering Files from Another Computer
 
 To do this simply start the VaporOS-FTPServer program from Steam and enter the address shown in the file browser or and FTP client. This will allow you to transfer files to and from your Steam machine.
 
-### Using the Xbox 360 Controller Button Combinations
+## Known Issues
 
-
+- Retroarch and Kodi don't work with every type of controller, the Steam controller does work
+- On BIOS systems the installer will ask where to install the bootloader, filling in /dev/sda should work on most systems. This is a SteamOS bug.
+- Exiting VaporOS-FTPServer doesn't work with every type of controller at the moment. Binding Esc to the controller or pressing Esc on the keyboard quits it
 
 ## Support
 
