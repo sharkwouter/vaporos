@@ -54,11 +54,17 @@ After installation there are a couple of steps to take to allow the use of Vapor
 
 ### Adding the VaporOS Applications to Steam
 
-After logging in the Retroarch, Kodi and VaporOS-FTPServer have to be added to Steam before then can be used. To do this go to setting and under System pick "Add Library Shortcut". Pick the application you'd like to add. Repeat until all of them are in your Steam library.
+After logging in the Retroarch, Kodi, VaporOS-FTPServer and VaporOS Flatpak Manager have to be added to Steam before then can be used. To do this go to setting and under System pick "Add Library Shortcut". Pick the application you'd like to add. Repeat until all of them are in your Steam library.
 
 ### Transfering Files from Another Computer
 
 To do this simply start the VaporOS-FTPServer program from Steam and enter the address shown in the file browser or and FTP client. This will allow you to transfer files to and from your Steam machine.
+
+### Installing Applications with VaporOS Flatpak Manager
+
+Installing applications with VaporOS Flatpak Manager is quite easy, just pick the software you'd like to install and press A. Installation can take a while. Once the installation screen disappears you can return to Steam.
+
+Within Steam go to "Settings" -> "Add Library Shortcut" and pick the installed application from the list. It can now be launched from your Steam library.
 
 ## Known Issues
 
