@@ -9,6 +9,7 @@ VaporOS contains all the features found in SteamOS plus the following additions:
 - **Retroarch**, an emulator  frontend with support for PSP, PS1, N64, SNES, NES, GBA and more
 - **Kodi**, an entertainment center which can play videos and music
 - **VaporOS-FTPServer**, a file server which allows you to easily transfer files
+- **VaporOS Flatpak Manager**, a front-end for flatpak. It allows for easy software installation
 - **Improved desktop experience** with a text editor, archive manager, media player (**VLC**) and **Gnome Tweak Tool** added
 - **Bash completion** for command line users
 - **TRIM support** for SSDs
@@ -64,6 +65,7 @@ To do this simply start the VaporOS-FTPServer program from Steam and enter the a
 - Retroarch and Kodi don't work with every type of controller, the Steam controller does work
 - On BIOS systems the installer will ask where to install the bootloader, filling in /dev/sda should work on most systems. This is a SteamOS bug.
 - Exiting VaporOS-FTPServer doesn't work with every type of controller at the moment. Binding Esc to the controller or pressing Esc on the keyboard quits it
+- Applications installed with Flatpak don't have sound on all systems
 
 ## Support
 
