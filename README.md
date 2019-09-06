@@ -65,7 +65,7 @@ To do this simply start the VaporOS-FTPServer program from Steam and enter the a
 - Retroarch and Kodi don't work with every type of controller, the Steam controller does work
 - On BIOS systems the installer will ask where to install the bootloader, filling in /dev/sda should work on most systems. This is a SteamOS bug.
 - Exiting VaporOS-FTPServer doesn't work with every type of controller at the moment. Binding Esc to the controller or pressing Esc on the keyboard quits it
-- Applications installed with Flatpak don't have sound on all systems
+- Applications installed with Flatpak don't have sound
 
 ## Support
 
