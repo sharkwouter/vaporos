@@ -2,6 +2,9 @@
 
 SteamOS is an operating system which can turn a computer into a game console. VaporOS improves on this by not only focussing on games, but also offer multimedia and emulation support along with some other extras to make the system more enjoyable to use.
 
+[](https://github.com/sharkwouter/vaporos/raw/master/screenshot1.png)
+[](https://github.com/sharkwouter/vaporos/raw/master/screenshot2.png)
+
 ## Features
 
 VaporOS contains all the features found in SteamOS plus the following additions:
