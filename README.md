@@ -13,7 +13,7 @@ VaporOS contains all the features found in SteamOS plus the following additions:
 
 - **Retroarch**, an emulator  frontend with support for PSP, PS1, N64, SNES, NES, GBA and more
 - **Kodi**, an entertainment center which can play videos and music
-- **VaporOS-FTPServer**, a file server which allows you to easily transfer files
+- **VaporOS-FTPServer**, a file server which allows you to easily transfer files to your VaporOS machine
 - **VaporOS Flatpak Manager**, a front-end for flatpak. It allows for easy software installation
 - **Improved desktop experience** with a text editor, archive manager, media player (**VLC**) and **Gnome Tweak Tool** added
 - **Bash completion** for command line users
