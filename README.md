@@ -21,35 +21,28 @@ VaporOS contains all the features found in SteamOS plus the following additions:
 
 Download the latest Vaporos release [here](https://github.com/sharkwouter/vaporos/releases).
 
+## System Requirements
+
+VaporOS has the following hardware requirements:
+
+- Intel or AMD 64-bit capable processor
+- 4GB or more RAM
+- 30GB or larger hard drive or SSD
+
+The following graphics cards are supported:
+- Nvidia GTX 600 series or newer
+- AMD HD 7000 series or newer
+- Intel HD 4000 series or newer
+
 ## Installation
 
 VaporOS can be installed from a DVD or from a USB stick. To be able to do so, the latest VaporOS ISO (vaporos-XXX.iso) has to be downloaded like mentioned above. Burning the ISO to a DVD can be done with any DVD burning program like Imgburn. Instructions on how to use a USB stick will be listed below. A USB stick of at least 2 GB will be required for this.
 
 After having made the installation media (DVD or USB stick), installing from it is pretty straight forward. Put the installation media in the computer and press F8, F9, F11 or F12 during boot to open the boot menu and pick it. Which of these buttons works depends on the hardware and might take some trial and error. After that pick the option "Automated installation" (**this will erase your disk!**) and wait for the installation to finish. The system will reboot multiple times during installation. Once finished select the reboot option and press enter. You are now ready to use VaporOS.
 
-### Installing from USB (Windows)
+### Installing from USB
 
-Download the tool [Win32 Disk Imager](https://sourceforge.net/projects/win32diskimager/) and use it to copy the VaporOS ISO to your USB stick. **This erases all data on the USB stick!!**
-
-### Installing from USB (Mac)
-
-Open the application ``terminal``. Now run the ``diskutil list`` command see a list of drives in the system. Plug in the USB stick and run ``diskutil list`` again and use the difference in the output to find which device is your USB stick, this should be something like /dev/diskX or /dev/rdiskX.
-
-To write the ISO to the USB stick, use the following command:
-```
-sudo dd if=/path/to/installation/media.iso of=/dev/diskX
-```
-**This erases all data on the target device! Do replace the path and the X in the device location, but be careful not to pick the wrong device!**
-
-### Installing from USB (Linux)
-
-Open a terminal and run the ``lsblk`` command see a list of drives in the system. Plug in the USB stick and run ``lsblk`` again and use the difference in the output to find which device is your USB stick, this should be something like /dev/diskX or /dev/rdiskX.
-
-To write the ISO to the USB stick, use the following command:
-```
-sudo dd if=/path/to/installation/media.iso of=/dev/sdX
-```
-**This erases all data on the target device! Do replace the path and the X in the device location, but be careful not to pick the wrong device!**
+Download the tool [Balena Etcher](https://www.balena.io/etcher/) and use it to copy the VaporOS ISO to your USB stick. **This erases all data on the USB stick!!**
 
 ## Using VaporOS
 
