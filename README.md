@@ -1,4 +1,4 @@
-![](https://raw.githubusercontent.com/sharkwouter/vaporos/master/logo.jpg)
+![](https://github.com/sharkwouter/vaporos/raw/master/assets/images/logo.jpg)
 
 ### SteamOS with extra features
 
