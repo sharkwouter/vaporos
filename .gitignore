@@ -4,3 +4,5 @@ vaporos-latest.iso
 vaporos-latest.iso.md5
 chroot
 packages
+package-builder
+*.iso
