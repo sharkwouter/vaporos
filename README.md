@@ -1,5 +1,7 @@
 ![](https://github.com/sharkwouter/vaporos/raw/master/assets/images/logo.jpg)
 
+**Important Note:** VaporOS is **no longer maintained!** I recommend using **[ChimeraOS](https://chimeraos.org/)**.
+
 ### SteamOS with extra features
 
 SteamOS is an operating system which can turn a computer into a game console. VaporOS improves on this by not only focussing on games, but also offer multimedia and emulation support along with some other extras to make the system more enjoyable to use.
